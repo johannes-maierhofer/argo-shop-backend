@@ -13,7 +13,8 @@ namespace Argo.Shop.Application.Features.Catalog.Product
             CreateMap<Create.Command, Product>();
 
             // view models
-            CreateMap<Domain.Catalog.Product, ProductDetailsView>();
+            CreateMap<Product, ProductListView>();
+            CreateMap<Product, ProductDetailsView>();
         }
     }
 }
