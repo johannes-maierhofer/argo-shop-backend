@@ -2,11 +2,18 @@ using Argo.Shop.Application;
 using Argo.Shop.Infrastructure;
 using Argo.Shop.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+const string corsPolicyName = "ArgoShop_AllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicyName, cfg => cfg.WithOrigins("http://localhost:4300", "https://localhost:4300")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+});
 
 builder.Services.AddControllers();
 
@@ -35,6 +42,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(corsPolicyName);
 
 app.UseAuthorization();
 
