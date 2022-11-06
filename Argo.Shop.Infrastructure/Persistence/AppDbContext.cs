@@ -3,17 +3,19 @@ using Microsoft.Extensions.Logging;
 using System.Reflection;
 using Argo.Shop.Application.Common.Persistence;
 using Argo.Shop.Domain.Catalog;
+using Argo.Shop.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Argo.Shop.Infrastructure.Persistence
 {
-    public class AppDbContext : DbContext, IAppDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
     {
         private readonly ILoggerFactory _loggerFactory;
 
         public AppDbContext(
             DbContextOptions<AppDbContext> options,
-            ILoggerFactory loggerFactory)
-        : base(options)
+            ILoggerFactory loggerFactory) 
+            : base(options)
         {
             _loggerFactory = loggerFactory;
             this.Catalog = new CatalogSchema(this);
@@ -36,7 +38,6 @@ namespace Argo.Shop.Infrastructure.Persistence
 
             base.OnModelCreating(builder);
         }
-
     }
 
     public class CatalogSchema : ICatalogSchema

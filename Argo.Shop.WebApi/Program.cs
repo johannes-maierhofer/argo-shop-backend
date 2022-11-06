@@ -1,18 +1,40 @@
 using Argo.Shop.Application;
+using Argo.Shop.Application.Common.Identity;
 using Argo.Shop.Infrastructure;
+using Argo.Shop.Infrastructure.Identity;
 using Argo.Shop.Infrastructure.Persistence;
+using Argo.Shop.WebApi.Configuration;
+using Argo.Shop.WebApi.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// set up application
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services
+    .AddBearerTokenAuthentication(builder.Configuration)
+    .AddAuthorization();
+
+//builder.Services.AddHealthChecks()
+//    .AddDbContextCheck<AppDbContext>();
+
+// setup CORS
 const string corsPolicyName = "ArgoShop_AllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(corsPolicyName, cfg => cfg.WithOrigins("http://localhost:4300", "https://localhost:4300")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials());
+    options.AddPolicy(corsPolicyName, cfg => cfg
+            .WithOrigins("http://localhost:4300", "https://localhost:4300")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+    );
 });
 
 builder.Services.AddControllers();
@@ -21,6 +43,32 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "ArgoShop API", Version = "v1" });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+
+    // fixes problem with classes in namespaces
     options.CustomSchemaIds(type => type.ToString().Replace("+", "."));
 
     // for documentation to work, make sure the "Documentation file" option in the project properties is checked
@@ -28,9 +76,6 @@ builder.Services.AddSwaggerGen(options =>
     //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     //options.IncludeXmlComments(xmlPath, true);  //
 });
-
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -45,6 +90,7 @@ app.UseHttpsRedirection();
 
 app.UseCors(corsPolicyName);
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -61,6 +107,10 @@ using (var scope = app.Services.CreateScope())
         if (context.Database.IsSqlServer())
             context.Database.Migrate();
 
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        await AppDbContextSeed.SeedDefaultUserAsync(userManager, roleManager);
         await AppDbContextSeed.SeedSampleDataAsync(context);
     }
     catch (Exception ex)

@@ -68,6 +68,11 @@ namespace Argo.Shop.Application.Features
             return new Result(ResultStatus.Invalid, messages);
         }
 
+        public static Result Error(IEnumerable<string> messages)
+        {
+            return new Result(ResultStatus.Error, messages.ToArray());
+        }
+
         public static Result Error(params string[] messages)
         {
             return new Result(ResultStatus.Error, messages);
