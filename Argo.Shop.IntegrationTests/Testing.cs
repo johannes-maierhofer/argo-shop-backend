@@ -2,18 +2,21 @@
 using Argo.Shop.Domain.Catalog;
 using Argo.Shop.Infrastructure;
 using Argo.Shop.Infrastructure.Persistence;
+using Argo.Shop.IntegrationTests.TestHelpers;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Respawn;
+using Respawn.Graph;
 
 namespace Argo.Shop.IntegrationTests
 {
-    public class Testing
+    public static class Testing
     {
         private static IConfigurationRoot _configuration = null!;
 
         private static IServiceScopeFactory _scopeFactory = null!;
-        //private static Checkpoint _checkpoint = null!;
+        private static Respawner _respawner = null!;
         //private static string? _currentUserId;
 
         public static void ConfigureApplication()
@@ -34,14 +37,28 @@ namespace Argo.Shop.IntegrationTests
             _scopeFactory = services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>();
         }
 
-        public static void EnsureDatabase()
+        public static async Task EnsureDatabase()
         {
             using var scope = _scopeFactory.CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureCreatedAsync();
+
+            _respawner = await Respawner.CreateAsync(
+                _configuration.GetConnectionString("DefaultConnection"),
+                new RespawnerOptions
+                {
+                    TablesToIgnore = new Table[] { "__EFMigrationsHistory" }
+                });
+        }
+
+        public static async Task ReseedSampleData()
+        {
+            // deletes existing data according to RespawnerOptions
+            await _respawner.ResetAsync(_configuration.GetConnectionString("DefaultConnection"));
+            await SeedSampleData();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -53,13 +70,14 @@ namespace Argo.Shop.IntegrationTests
             return await mediator.Send(request);
         }
 
-        public static void SeedSampleData()
+        public static async Task SeedSampleData()
         {
             using var scope = _scopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             context.Catalog.Products.AddRange(new Product
                 {
+                    Id = 1,
                     Name = "Adidas Stan Smith",
                     Category = "Shoes",
                     Price = 90,
@@ -67,6 +85,7 @@ namespace Argo.Shop.IntegrationTests
                 },
                 new Product
                 {
+                    Id = 2,
                     Name = "Nike Air Max",
                     Category = "Shoes",
                     Price = 110,
@@ -74,6 +93,7 @@ namespace Argo.Shop.IntegrationTests
                 },
                 new Product
                 {
+                    Id = 3,
                     Name = "Reebok Sweat Shirt",
                     Category = "Clothes",
                     Price = 45,
@@ -81,6 +101,7 @@ namespace Argo.Shop.IntegrationTests
                 },
                 new Product
                 {
+                    Id = 4,
                     Name = "Puma T-Shirt",
                     Category = "Clothes",
                     Price = 30,
@@ -88,6 +109,7 @@ namespace Argo.Shop.IntegrationTests
                 },
                 new Product
                 {
+                    Id = 5,
                     Name = "Under Armour",
                     Category = "Shoes",
                     Price = 130,
@@ -95,6 +117,7 @@ namespace Argo.Shop.IntegrationTests
                 },
                 new Product
                 {
+                    Id = 6,
                     Name = "Nike Sweat shirt",
                     Category = "Clothes",
                     Price = 65,
@@ -102,6 +125,7 @@ namespace Argo.Shop.IntegrationTests
                 },
                 new Product
                 {
+                    Id = 7,
                     Name = "Spalding basketball",
                     Category = "Gear",
                     Price = 45,
@@ -109,6 +133,7 @@ namespace Argo.Shop.IntegrationTests
                 },
                 new Product
                 {
+                    Id = 8,
                     Name = "Dumbbell 5kg",
                     Category = "Gear",
                     Price = 3.5m,
@@ -116,13 +141,14 @@ namespace Argo.Shop.IntegrationTests
                 },
                 new Product
                 {
+                    Id = 9,
                     Name = "New Balance",
                     Category = "Shoes",
                     Price = 120,
                     Description = "Description for New Balance"
                 });
 
-            context.SaveChanges();
+            await context.SaveChangesWithIdentityInsertAsync<Product>();
         }
     }
 }

@@ -1,23 +1,36 @@
-﻿namespace Argo.Shop.IntegrationTests
+﻿// ReSharper disable ClassNeverInstantiated.Global
+namespace Argo.Shop.IntegrationTests
 {
     [CollectionDefinition("Application")]
     public class ApplicationCollection : ICollectionFixture<ApplicationFixture>
     {
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class ApplicationFixture : IDisposable
+    public class ApplicationFixture : IAsyncLifetime
     {
-        public ApplicationFixture()
+        public async Task InitializeAsync()
         {
             Testing.ConfigureApplication();
-            Testing.EnsureDatabase();
-            Testing.SeedSampleData();
+            await Testing.EnsureDatabase();
+            await Testing.SeedSampleData();
         }
 
-        public void Dispose()
+        public Task DisposeAsync()
         {
-            // ... clean up test data from the database ...
+            return Task.CompletedTask;
+        }
+    }
+
+    public class ReseedDbFixture : IAsyncLifetime
+    {
+        public async Task InitializeAsync()
+        {
+            await Testing.ReseedSampleData();
+        }
+
+        public Task DisposeAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 }
