@@ -32,6 +32,7 @@ namespace Argo.Shop.IntegrationTests
         // data are reseeded before each test
         public async Task InitializeAsync()
         {
+            this.Output.WriteLine("Reseed Db data");
             await Testing.ReseedSampleData();
         }
 
