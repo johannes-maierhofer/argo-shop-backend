@@ -31,5 +31,18 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Product
             Assert.Equal(ResultStatus.Invalid, result.Status);
             Assert.NotEmpty(result.Messages);
         }
+
+        [Fact]
+        public async Task Create_WithExistingProductName_Invalid()
+        {
+            var result = await Testing.SendAsync(new Create.Command
+            {
+                Name = "Adidas Stan Smith", // product with this name already exists
+                Category = "Shoes"
+            });
+
+            Assert.Equal(ResultStatus.Invalid, result.Status);
+            Assert.NotEmpty(result.Messages);
+        }
     }
 }

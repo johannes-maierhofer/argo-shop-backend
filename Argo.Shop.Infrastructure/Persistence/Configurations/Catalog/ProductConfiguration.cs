@@ -27,6 +27,7 @@ namespace Argo.Shop.Infrastructure.Persistence.Configurations.Catalog
                 .HasForeignKey(pi => pi.ProductId);
 
             builder.HasIndex(p => p.Category);
+            builder.HasIndex(p => p.Name).IsUnique();
         }
     }
 }
