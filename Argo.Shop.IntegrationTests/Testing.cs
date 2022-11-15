@@ -46,12 +46,15 @@ namespace Argo.Shop.IntegrationTests
             await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
 
+            // respawner creates a data delete script
             _respawner = await Respawner.CreateAsync(
                 _configuration.GetConnectionString("DefaultConnection"),
                 new RespawnerOptions
                 {
                     TablesToIgnore = new Table[] { "__EFMigrationsHistory" }
                 });
+
+            // in the future we might also check out Reseed from https://github.com/uladz-zubrycki/Reseed
         }
 
         public static async Task ReseedSampleData()
