@@ -7,6 +7,7 @@ using Argo.Shop.WebApi.Configuration;
 using Argo.Shop.WebApi.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +31,10 @@ const string corsPolicyName = "ArgoShop_AllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(corsPolicyName, cfg => cfg
-            .WithOrigins("http://localhost:4300", "https://localhost:4300")
+            .WithOrigins("http://localhost:4200",
+                "https://localhost:4200", 
+                "http://localhost:4300", 
+                "https://localhost:4300")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()
@@ -84,6 +88,15 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    // setup virtual directory for images
+    string physicalFilePath = Directory.GetParent(Directory.GetCurrentDirectory())!.FullName + "\\images";
+    app.UseFileServer(new FileServerOptions
+    {
+        FileProvider = new PhysicalFileProvider(physicalFilePath),
+        RequestPath = new PathString("/images"),
+        EnableDirectoryBrowsing = false
+    });
 }
 
 app.UseHttpsRedirection();
