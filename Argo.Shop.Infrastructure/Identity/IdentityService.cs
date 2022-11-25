@@ -30,7 +30,7 @@ public class IdentityService : IIdentityService
         return user.UserName;
     }
 
-    public async Task<Result<ClaimsIdentity>> ValidateUserAsync(string? userName, string? password)
+    public async Task<UserValidationResult> ValidateUserAsync(string? userName, string? password)
     {
         var identityUser = await _userManager.FindByNameAsync(userName);
 
@@ -44,11 +44,19 @@ public class IdentityService : IIdentityService
             if (result == PasswordVerificationResult.Success)
             {
                 var principal = await _userClaimsPrincipalFactory.CreateAsync(identityUser);
-                return Result.Success(new ClaimsIdentity(principal.Claims));
+                return new UserValidationResult
+                {
+                    IsValid = true,
+                    ClaimsIdentity = new ClaimsIdentity(principal.Claims),
+                    UserId = identityUser.Id
+                };
             }
         }
 
-        return Result.Error<ClaimsIdentity>("Username or password is incorrect.");
+        return new UserValidationResult()
+        {
+            IsValid = false
+        };
     }
 
     public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)

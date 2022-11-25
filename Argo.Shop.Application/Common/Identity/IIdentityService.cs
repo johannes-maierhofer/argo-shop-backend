@@ -15,6 +15,13 @@ namespace Argo.Shop.Application.Common.Identity
 
         Task<Result> DeleteUserAsync(string userId);
 
-        Task<Result<ClaimsIdentity>> ValidateUserAsync(string? userName, string? password);
+        Task<UserValidationResult> ValidateUserAsync(string? userName, string? password);
+    }
+
+    public class UserValidationResult
+    {
+        public bool IsValid { get; set; }
+        public ClaimsIdentity? ClaimsIdentity { get; set; }
+        public string? UserId { get; set; }
     }
 }

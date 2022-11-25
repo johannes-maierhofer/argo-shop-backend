@@ -5,7 +5,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Argo.Shop.Application.Common.Identity;
-using Argo.Shop.Application.Features;
 using Argo.Shop.WebApi.Configuration;
 
 // see also JwtAuthSampleAPI from
@@ -34,15 +33,21 @@ namespace Argo.Shop.WebApi.Controllers.Identity
         {
             var validationResult = await _identityService.ValidateUserAsync(credentials.Username, credentials.Password);
 
-            if (validationResult.Status == ResultStatus.Success && validationResult.Data != null)
+            if (validationResult.IsValid)
             {
-                var token = GenerateToken(validationResult.Data);
-                return Ok(new { Token = token, Message = "Success" });
+                var token = GenerateToken(validationResult.ClaimsIdentity!);
+                return Ok(new
+                {
+                    Token = token, 
+                    Username = validationResult.ClaimsIdentity?.Name,
+                    validationResult.UserId
+                    // validationResult.ClaimsIdentity?.Claims
+                });
             }
 
             return new BadRequestObjectResult(new
             {
-                Message = validationResult.Messages.FirstOrDefault() ?? "Login failed"
+                Message = "Login failed"
             });
         }
 
