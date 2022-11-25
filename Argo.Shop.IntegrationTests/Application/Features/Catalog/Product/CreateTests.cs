@@ -37,8 +37,8 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Product
         {
             var result = await Testing.SendAsync(new Create.Command
             {
-                Name = "Adidas Stan Smith", // product with this name already exists
-                Category = "Shoes"
+                Name = "Black Five-Panel Cap with White Logo", // product with this name already exists
+                Category = "Caps"
             });
 
             Assert.Equal(ResultStatus.Invalid, result.Status);

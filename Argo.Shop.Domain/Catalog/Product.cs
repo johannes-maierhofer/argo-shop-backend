@@ -8,6 +8,7 @@ namespace Argo.Shop.Domain.Catalog
         public decimal Price { get; set; }
         public string Category { get; set; } = string.Empty;
         public string? Description { get; set; }
+        public string? PrimaryImageFileName { get; set; }
         public List<ProductImage> Images { get; set; } = new();
     }
 }

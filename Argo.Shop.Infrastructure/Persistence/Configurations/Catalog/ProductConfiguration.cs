@@ -22,6 +22,9 @@ namespace Argo.Shop.Infrastructure.Persistence.Configurations.Catalog
             builder.Property(p => p.Price)
                 .HasPrecision(14, 2);
 
+            builder.Property(p => p.PrimaryImageFileName)
+                .HasMaxLength(256);
+
             builder.HasMany(p => p.Images)
                 .WithOne()
                 .HasForeignKey(pi => pi.ProductId);

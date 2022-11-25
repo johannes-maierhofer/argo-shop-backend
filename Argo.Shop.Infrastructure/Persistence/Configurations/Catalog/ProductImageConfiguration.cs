@@ -14,10 +14,6 @@ namespace Argo.Shop.Infrastructure.Persistence.Configurations.Catalog
             builder.Property(p => p.FileName)
                 .IsRequired()
                 .HasMaxLength(256);
-
-            builder.Property(p => p.FileType)
-                .IsRequired()
-                .HasMaxLength(10);
         }
     }
 }

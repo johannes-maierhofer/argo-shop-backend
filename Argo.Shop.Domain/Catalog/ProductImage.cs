@@ -6,6 +6,6 @@ namespace Argo.Shop.Domain.Catalog
     {
         public int ProductId { get; set; }
         public string FileName { get; set; } = string.Empty;
-        public string FileType { get; set; } = string.Empty;
+        public bool IsPrimary { get; set; }
     }
 }
