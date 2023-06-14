@@ -1,15 +1,16 @@
-﻿using Argo.Shop.Application.Common.Persistence;
-using Argo.Shop.Application.Features.Catalog.Product.Models;
+﻿using Argo.Shop.Application.Common.Models;
+using Argo.Shop.Application.Common.Persistence;
+using Argo.Shop.Application.Features.Catalog.Products.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Argo.Shop.Application.Features.Catalog.Product
+namespace Argo.Shop.Application.Features.Catalog.Products
 {
-    public static class GetDetails
+    public static class GetProductDetails
     {
-        public class Query : IRequest<Result<ProductDetailsView>>
+        public record Query : IRequest<Result<ProductDetailsView>>
         {
             public int Id { get; set; }
         }
@@ -31,10 +32,9 @@ namespace Argo.Shop.Application.Features.Catalog.Product
                     .ProjectTo<ProductDetailsView>(_mapper.ConfigurationProvider)
                     .SingleOrDefaultAsync(p => p.Id == query.Id, cancellationToken: cancellationToken);
 
-                if (view == null)
-                    return Result.NotFound<ProductDetailsView>();
-
-                return Result.Success(view);
+                return view == null 
+                    ? Result.NotFound<ProductDetailsView>() 
+                    : Result.Ok(view);
             }
         }
     }

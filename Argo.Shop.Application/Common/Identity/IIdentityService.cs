@@ -1,5 +1,5 @@
-﻿using Argo.Shop.Application.Features;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using Argo.Shop.Application.Common.Models;
 
 namespace Argo.Shop.Application.Common.Identity
 {

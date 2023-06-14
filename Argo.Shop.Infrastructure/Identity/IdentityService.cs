@@ -1,9 +1,9 @@
 ﻿using Argo.Shop.Application.Common.Identity;
-using Argo.Shop.Application.Features;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Argo.Shop.Application.Common.Models;
 
 namespace Argo.Shop.Infrastructure.Identity;
 
@@ -34,28 +34,23 @@ public class IdentityService : IIdentityService
     {
         var identityUser = await _userManager.FindByNameAsync(userName);
 
-        if (identityUser != null)
-        {
-            var result = _userManager.PasswordHasher.VerifyHashedPassword(
-                identityUser,
-                identityUser.PasswordHash,
-                password);
+        if (identityUser == null)
+            return new UserValidationResult { IsValid = false };
 
-            if (result == PasswordVerificationResult.Success)
-            {
-                var principal = await _userClaimsPrincipalFactory.CreateAsync(identityUser);
-                return new UserValidationResult
-                {
-                    IsValid = true,
-                    ClaimsIdentity = new ClaimsIdentity(principal.Claims),
-                    UserId = identityUser.Id
-                };
-            }
-        }
+        var result = _userManager.PasswordHasher.VerifyHashedPassword(
+            identityUser,
+            identityUser.PasswordHash,
+            password);
 
-        return new UserValidationResult()
+        if (result != PasswordVerificationResult.Success)
+            return new UserValidationResult { IsValid = false };
+
+        var principal = await _userClaimsPrincipalFactory.CreateAsync(identityUser);
+        return new UserValidationResult
         {
-            IsValid = false
+            IsValid = true,
+            ClaimsIdentity = new ClaimsIdentity(principal.Claims),
+            UserId = identityUser.Id
         };
     }
 
@@ -99,7 +94,7 @@ public class IdentityService : IIdentityService
     {
         var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
-        return user != null ? await DeleteUserAsync(user) : Result.Success();
+        return user != null ? await DeleteUserAsync(user) : Result.Ok();
     }
 
     private async Task<Result> DeleteUserAsync(ApplicationUser user)

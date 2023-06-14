@@ -1,25 +1,23 @@
 ﻿// ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable MemberCanBeProtected.Global
 
-using Argo.Shop.Domain.Common.Extensions;
-
-namespace Argo.Shop.Application.Features
+namespace Argo.Shop.Application.Common.Models
 {
     public enum ResultStatus
     {
-        Success = 1,
-        NotFound = 2,
-        Invalid = 3,
-        Gone = 4,
-        Error = 5
+        Ok = 200,
+        NotFound = 404,
+        Invalid = 400,
+        Gone = 410,
+        Error = 500,
         //Duplicate,
-        //Unauthorized,
+        Unauthorized = 401
     }
 
     public record Result
     {
-        public ResultStatus Status { get; } = ResultStatus.Success;
-        
+        public ResultStatus Status { get; } = ResultStatus.Ok;
+
         public IList<string> Messages { get; } = new List<string>();
 
         protected Result()
@@ -52,15 +50,15 @@ namespace Argo.Shop.Application.Features
 
             return (Result)result!;
         }
-        
-        public static Result Success()
+
+        public static Result Ok()
         {
-            return new Result(ResultStatus.Success);
+            return new Result(ResultStatus.Ok);
         }
 
-        public static Result NotFound()
+        public static Result NotFound(params string[] messages)
         {
-            return new Result(ResultStatus.NotFound);
+            return new Result(ResultStatus.NotFound, messages);
         }
 
         public static Result Invalid(params string[] messages)
@@ -68,24 +66,24 @@ namespace Argo.Shop.Application.Features
             return new Result(ResultStatus.Invalid, messages);
         }
 
-        public static Result Error(IEnumerable<string> messages)
-        {
-            return new Result(ResultStatus.Error, messages.ToArray());
-        }
-
         public static Result Error(params string[] messages)
         {
             return new Result(ResultStatus.Error, messages);
         }
 
-        public static Result<TData> Success<TData>(TData data)
+        public static Result Unauthorized(params string[] messages)
+        {
+            return new Result(ResultStatus.Unauthorized, messages);
+        }
+
+        public static Result<TData> Ok<TData>(TData data)
         {
             return new Result<TData>(data);
         }
 
-        public static Result<TData> NotFound<TData>()
+        public static Result<TData> NotFound<TData>(params string[] messages)
         {
-            return new Result<TData>(ResultStatus.NotFound);
+            return new Result<TData>(ResultStatus.NotFound, messages);
         }
 
         public static Result<TData> Invalid<TData>(params string[] messages)
@@ -101,6 +99,11 @@ namespace Argo.Shop.Application.Features
         public static Result<TData> Gone<TData>(params string[] messages)
         {
             return new Result<TData>(ResultStatus.Gone, messages);
+        }
+
+        public static Result<TData> Unauthorized<TData>(params string[] messages)
+        {
+            return new Result<TData>(ResultStatus.Unauthorized, messages);
         }
     }
 
@@ -121,24 +124,6 @@ namespace Argo.Shop.Application.Features
         public Result(TResult data)
         {
             Data = data;
-        }
-    }
-
-    public static class ResultExtensions
-    {
-        public static bool IsOfTypeResult(this Type type)
-        {
-            return type.IsNonGenericResultType() || type.IsGenericResultType();
-        }
-
-        public static bool IsNonGenericResultType(this Type type)
-        {
-            return type.IsAssignableTo(typeof(Result));
-        }
-
-        public static bool IsGenericResultType(this Type type)
-        {
-            return type.IsAssignableToGenericType(typeof(Result<>));
         }
     }
 }

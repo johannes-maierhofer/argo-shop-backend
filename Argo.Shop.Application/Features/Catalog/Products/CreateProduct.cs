@@ -1,14 +1,17 @@
-﻿using Argo.Shop.Application.Common.Persistence;
+﻿using Argo.Shop.Application.Common.Models;
+using Argo.Shop.Application.Common.Persistence;
+using Argo.Shop.Application.Common.Security;
+using Argo.Shop.Domain.Catalog.Products;
 using AutoMapper;
 using MediatR;
+using ReviewCleanArch.Application.Common.Mediatr;
 
-namespace Argo.Shop.Application.Features.Catalog.Product
+namespace Argo.Shop.Application.Features.Catalog.Products
 {
-    using Domain.Catalog;
-
-    public static class Create
+    public static class CreateProduct
     {
-        public class Command : CommandBase<Result<int>>
+        [Authorize(Roles = "Administrator")]
+        public class Command : ICommand<Result<int>>
         {
             public string Name { get; set; } = string.Empty;
             public decimal Price { get; set; }
@@ -33,7 +36,7 @@ namespace Argo.Shop.Application.Features.Catalog.Product
                 _dbContext.Catalog.Products.Add(product);
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                return Result.Success(product.Id);
+                return Result.Ok(product.Id);
             }
         }
     }

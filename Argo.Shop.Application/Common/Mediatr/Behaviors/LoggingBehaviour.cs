@@ -1,9 +1,9 @@
 ﻿using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 
-namespace Argo.Shop.Application.Common.Behaviors
+namespace Argo.Shop.Application.Common.Mediatr.Behaviors
 {
-    public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> 
+    public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest>
         where TRequest : notnull
     {
         private readonly ILogger _logger;

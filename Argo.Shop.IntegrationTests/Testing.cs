@@ -1,5 +1,5 @@
 ﻿using Argo.Shop.Application;
-using Argo.Shop.Domain.Catalog;
+using Argo.Shop.Domain.Catalog.Products;
 using Argo.Shop.Infrastructure;
 using Argo.Shop.Infrastructure.Persistence;
 using Argo.Shop.IntegrationTests.TestHelpers;

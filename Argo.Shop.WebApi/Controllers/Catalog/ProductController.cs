@@ -1,9 +1,7 @@
-﻿using Argo.Shop.Application.Common.Persistence;
-using Argo.Shop.Application.Features;
-using Argo.Shop.Application.Features.Catalog.Product;
-using Argo.Shop.Application.Features.Catalog.Product.Models;
+﻿using Argo.Shop.Application.Common.Models;
+using Argo.Shop.Application.Features.Catalog.Products;
+using Argo.Shop.Application.Features.Catalog.Products.Models;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Argo.Shop.WebApi.Controllers.Catalog
@@ -20,7 +18,7 @@ namespace Argo.Shop.WebApi.Controllers.Catalog
         }
 
         [HttpGet]
-        public async Task<Result<PagedResult<ProductListView>>> GetList([FromQuery]GetList.Query query)
+        public async Task<Result<PagedResult<ProductListView>>> GetList([FromQuery]GetProductList.Query query)
         {
             return await _mediator.Send(query);
         }
@@ -28,12 +26,11 @@ namespace Argo.Shop.WebApi.Controllers.Catalog
         [HttpGet("{id:int}")]
         public async Task<Result<ProductDetailsView>> GetDetails(int id)
         {
-            return await _mediator.Send(new GetDetails.Query { Id = id });
+            return await _mediator.Send(new GetProductDetails.Query { Id = id });
         }
 
-        [Authorize(Roles = "Administrator")]
         [HttpPost]
-        public async Task<Result<int>> Create(Create.Command cmd)
+        public async Task<Result<int>> Create(CreateProduct.Command cmd)
         {
             return await _mediator.Send(cmd);
         }

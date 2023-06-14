@@ -1,16 +1,15 @@
-﻿using Argo.Shop.Application.Features.Catalog.Product.Models;
+﻿using Argo.Shop.Application.Features.Catalog.Products.Models;
+using Argo.Shop.Domain.Catalog.Products;
 using AutoMapper;
 
-namespace Argo.Shop.Application.Features.Catalog.Product
+namespace Argo.Shop.Application.Features.Catalog.Products.Mappings
 {
-    using Domain.Catalog;
-
     public class ProductMappingProfile : Profile
     {
         public ProductMappingProfile()
         {
             // commands
-            CreateMap<Create.Command, Product>();
+            CreateMap<CreateProduct.Command, Product>();
 
             // view models
             CreateMap<Product, ProductListView>();

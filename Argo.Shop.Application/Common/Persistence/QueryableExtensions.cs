@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Argo.Shop.Application.Common.Models;
 
 namespace Argo.Shop.Application.Common.Persistence
 {

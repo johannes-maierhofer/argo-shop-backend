@@ -1,4 +1,4 @@
-﻿namespace Argo.Shop.Application.Features.Catalog.Product.Models
+﻿namespace Argo.Shop.Application.Features.Catalog.Products.Models
 {
     public class ProductDetailsView
     {

@@ -1,18 +1,19 @@
-﻿using Argo.Shop.Application.Common.Persistence;
-using Argo.Shop.Application.Features.Catalog.Product.Models;
+﻿using Argo.Shop.Application.Common.Models;
+using Argo.Shop.Application.Common.Persistence;
+using Argo.Shop.Application.Features.Catalog.Products.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 
-namespace Argo.Shop.Application.Features.Catalog.Product
+namespace Argo.Shop.Application.Features.Catalog.Products
 {
-    public static class GetList
+    public static class GetProductList
     {
-        public class Query : IRequest<Result<PagedResult<ProductListView>>>
+        public record Query : IRequest<Result<PagedResult<ProductListView>>>
         {
             public int Page { get; set; } = 1;
             public int PageSize { get; set; } = 3;
-            public string? FilterText { get; set; }
+            public string? FilterText { get; set; } = null;
         }
 
         public class QueryHandler : IRequestHandler<Query, Result<PagedResult<ProductListView>>>
@@ -36,7 +37,7 @@ namespace Argo.Shop.Application.Features.Catalog.Product
 
                 var pagedResult = await dbQuery.ToPagedResult(query.Page, query.PageSize);
 
-                return Result.Success(pagedResult);
+                return Result.Ok(pagedResult);
             }
         }
     }

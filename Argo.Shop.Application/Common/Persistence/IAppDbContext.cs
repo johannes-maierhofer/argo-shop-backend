@@ -1,4 +1,4 @@
-﻿using Argo.Shop.Domain.Catalog;
+﻿using Argo.Shop.Domain.Catalog.Products;
 using Microsoft.EntityFrameworkCore;
 
 namespace Argo.Shop.Application.Common.Persistence

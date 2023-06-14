@@ -1,8 +1,8 @@
-﻿using Argo.Shop.Application.Features;
+﻿using Argo.Shop.Application.Common.Models;
 using FluentValidation;
 using MediatR;
 
-namespace Argo.Shop.Application.Common.Behaviors
+namespace Argo.Shop.Application.Common.Mediatr.Behaviors
 {
     public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
@@ -37,10 +37,10 @@ namespace Argo.Shop.Application.Common.Behaviors
                         var failureMessages = failures.Select(f => f.ErrorMessage).ToArray();
                         return typeof(TResponse).IsGenericResultType()
                             ? CreateGenericErrorResult(failureMessages)
-                            : (TResponse)(object)Result.Error(failureMessages);
+                            : (TResponse)(object)Result.Invalid(failureMessages);
                     }
 
-                    throw new ValidationException(failures);
+                    throw new Exceptions.ValidationException(failures);
                 }
             }
 

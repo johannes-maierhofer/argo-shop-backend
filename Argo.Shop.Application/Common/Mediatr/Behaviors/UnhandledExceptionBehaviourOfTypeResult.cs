@@ -1,8 +1,8 @@
-﻿using Argo.Shop.Application.Features;
+﻿using Argo.Shop.Application.Common.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Argo.Shop.Application.Common.Behaviors
+namespace Argo.Shop.Application.Common.Mediatr.Behaviors
 {
     public class UnhandledExceptionBehaviourOfTypeResult<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
@@ -42,8 +42,8 @@ namespace Argo.Shop.Application.Common.Behaviors
             var resultType = typeof(TResponse).GetGenericArguments().First();
 
             return (TResponse)Result.CreateGenericInstance(
-                resultType, 
-                ResultStatus.Error, 
+                resultType,
+                ResultStatus.Error,
                 errorMessage);
         }
     }

@@ -1,4 +1,4 @@
-﻿using Argo.Shop.Domain.Catalog;
+﻿using Argo.Shop.Domain.Catalog.Products;
 using Argo.Shop.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 

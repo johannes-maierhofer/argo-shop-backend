@@ -2,9 +2,9 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace Argo.Shop.Application.Features.Catalog.Product.Validators
+namespace Argo.Shop.Application.Features.Catalog.Products.Validators
 {
-    public class CreateTodoListCommandValidator : AbstractValidator<Create.Command>
+    public class CreateTodoListCommandValidator : AbstractValidator<CreateProduct.Command>
     {
         private readonly IAppDbContext _dbContext;
 

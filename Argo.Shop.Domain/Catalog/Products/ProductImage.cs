@@ -1,6 +1,6 @@
 ﻿using Argo.Shop.Domain.Common;
 
-namespace Argo.Shop.Domain.Catalog
+namespace Argo.Shop.Domain.Catalog.Products
 {
     public class ProductImage : Entity<int>
     {

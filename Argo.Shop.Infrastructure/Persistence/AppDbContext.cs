@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using Argo.Shop.Application.Common.Persistence;
-using Argo.Shop.Domain.Catalog;
 using Argo.Shop.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Argo.Shop.Domain.Catalog.Products;
 
 namespace Argo.Shop.Infrastructure.Persistence
 {
