@@ -6,14 +6,14 @@ using MediatR;
 
 namespace Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductList
 {
-    public record GetProductListQuery : IRequest<Result<PagedResult<ProductListView>>>
+    public record GetProductListQuery : IRequest<Result<PagedResult<ProductListDto>>>
     {
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 3;
         public string? FilterText { get; set; } = null;
     }
 
-    public class QueryHandler : IRequestHandler<GetProductListQuery, Result<PagedResult<ProductListView>>>
+    public class QueryHandler : IRequestHandler<GetProductListQuery, Result<PagedResult<ProductListDto>>>
     {
         private readonly IAppDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -24,14 +24,14 @@ namespace Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductList
             _mapper = mapper;
         }
 
-        public async Task<Result<PagedResult<ProductListView>>> Handle(GetProductListQuery query,
+        public async Task<Result<PagedResult<ProductListDto>>> Handle(GetProductListQuery query,
             CancellationToken cancellationToken)
         {
             var dbQuery = _dbContext.Catalog.Products
                 .WhereIf(!string.IsNullOrEmpty(query.FilterText),
                     p => p.Name.Contains(query.FilterText!) ||
                          p.Description != null && p.Description.Contains(query.FilterText!))
-                .ProjectTo<ProductListView>(_mapper.ConfigurationProvider);
+                .ProjectTo<ProductListDto>(_mapper.ConfigurationProvider);
 
             var pagedResult = await dbQuery.ToPagedResult(query.Page, query.PageSize);
 

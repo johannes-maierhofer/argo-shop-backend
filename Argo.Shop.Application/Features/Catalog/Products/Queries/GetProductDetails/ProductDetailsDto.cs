@@ -1,11 +1,11 @@
-﻿namespace Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductList
+﻿namespace Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductDetails
 {
-    public class ProductListView
+    public class ProductDetailsDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public string Category { get; set; } = string.Empty;
-        public string? PrimaryImageFileName { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 }

@@ -19,13 +19,13 @@ namespace Argo.Shop.WebApi.Controllers.Catalog
         }
 
         [HttpGet]
-        public async Task<Result<PagedResult<ProductListView>>> GetList([FromQuery]GetProductListQuery query)
+        public async Task<Result<PagedResult<ProductListDto>>> GetList([FromQuery]GetProductListQuery query)
         {
             return await _mediator.Send(query);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<Result<ProductDetailsView>> GetDetails(int id)
+        public async Task<Result<ProductDetailsDto>> GetDetails(int id)
         {
             return await _mediator.Send(new GetProductDetailsQuery { Id = id });
         }

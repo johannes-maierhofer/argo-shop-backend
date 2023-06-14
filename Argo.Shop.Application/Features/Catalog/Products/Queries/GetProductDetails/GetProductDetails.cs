@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductDetails
 {
-    public record GetProductDetailsQuery : IRequest<Result<ProductDetailsView>>
+    public record GetProductDetailsQuery : IRequest<Result<ProductDetailsDto>>
     {
         public int Id { get; set; }
     }
 
-    public class QueryHandler : IRequestHandler<GetProductDetailsQuery, Result<ProductDetailsView>>
+    public class QueryHandler : IRequestHandler<GetProductDetailsQuery, Result<ProductDetailsDto>>
     {
         private readonly IAppDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -23,15 +23,15 @@ namespace Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductDeta
             _mapper = mapper;
         }
 
-        public async Task<Result<ProductDetailsView>> Handle(GetProductDetailsQuery query,
+        public async Task<Result<ProductDetailsDto>> Handle(GetProductDetailsQuery query,
             CancellationToken cancellationToken)
         {
             var view = await _dbContext.Catalog.Products
-                .ProjectTo<ProductDetailsView>(_mapper.ConfigurationProvider)
+                .ProjectTo<ProductDetailsDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(p => p.Id == query.Id, cancellationToken: cancellationToken);
 
             return view == null
-                ? Result.NotFound<ProductDetailsView>()
+                ? Result.NotFound<ProductDetailsDto>()
                 : Result.Ok(view);
         }
     }
