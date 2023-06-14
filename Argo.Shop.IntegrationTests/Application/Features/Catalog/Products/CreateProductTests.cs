@@ -1,19 +1,19 @@
 ﻿using Argo.Shop.Application.Common.Models;
-using Argo.Shop.Application.Features.Catalog.Products;
+using Argo.Shop.Application.Features.Catalog.Products.Commands.CreateProduct;
 using Xunit.Abstractions;
 
-namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Product
+namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
 {
-    public class CreateTests : CommandIntegrationTestBase
+    public class CreateProductTests : CommandIntegrationTestBase
     {
-        public CreateTests(ITestOutputHelper output) : base(output)
+        public CreateProductTests(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
         public async Task Create_ValidCommand_Ok()
         {
-            var result = await Testing.SendAsync(new CreateProduct.Command
+            var result = await Testing.SendAsync(new CreateProductCommand
             {
                 Name = "New shoes - " + Guid.NewGuid(),
                 Category = "Shoes"
@@ -26,7 +26,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Product
         [Fact]
         public async Task Create_RequiredValuesAreEmpty_Invalid()
         {
-            var result = await Testing.SendAsync(new CreateProduct.Command());
+            var result = await Testing.SendAsync(new CreateProductCommand());
 
             Assert.Equal(ResultStatus.Invalid, result.Status);
             Assert.NotEmpty(result.Messages);
@@ -35,7 +35,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Product
         [Fact]
         public async Task Create_WithExistingProductName_Invalid()
         {
-            var result = await Testing.SendAsync(new CreateProduct.Command
+            var result = await Testing.SendAsync(new CreateProductCommand
             {
                 Name = "Black Five-Panel Cap with White Logo", // product with this name already exists
                 Category = "Caps"

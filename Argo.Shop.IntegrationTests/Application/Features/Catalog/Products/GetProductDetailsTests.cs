@@ -1,12 +1,12 @@
 ﻿using Argo.Shop.Application.Common.Models;
-using Argo.Shop.Application.Features.Catalog.Products;
+using Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductDetails;
 using Xunit.Abstractions;
 
-namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Product
+namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
 {
-    public class GetDetailsTests : QueryIntegrationTestBase
+    public class GetProductDetailsTests : QueryIntegrationTestBase
     {
-        public GetDetailsTests(ITestOutputHelper output) : base(output)
+        public GetProductDetailsTests(ITestOutputHelper output) : base(output)
         {
         }
 
@@ -14,7 +14,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Product
         public async Task GetDetails_KnownId_Ok()
         {
             const int productId = 1;
-            var result = await Testing.SendAsync(new GetProductDetails.Query
+            var result = await Testing.SendAsync(new GetProductDetailsQuery
             {
                 Id = productId
             });
@@ -27,7 +27,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Product
         public async Task GetDetails_NonExistingId_NotFound()
         {
             const int nonExistingProductId = -1;
-            var result = await Testing.SendAsync(new GetProductDetails.Query
+            var result = await Testing.SendAsync(new GetProductDetailsQuery
                 {
                     Id = nonExistingProductId
                 }

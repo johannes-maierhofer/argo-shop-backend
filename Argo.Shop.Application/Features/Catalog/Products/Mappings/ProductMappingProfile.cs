@@ -1,4 +1,6 @@
-﻿using Argo.Shop.Application.Features.Catalog.Products.Models;
+﻿using Argo.Shop.Application.Features.Catalog.Products.Commands.CreateProduct;
+using Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductDetails;
+using Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductList;
 using Argo.Shop.Domain.Catalog.Products;
 using AutoMapper;
 
@@ -9,7 +11,7 @@ namespace Argo.Shop.Application.Features.Catalog.Products.Mappings
         public ProductMappingProfile()
         {
             // commands
-            CreateMap<CreateProduct.Command, Product>();
+            CreateMap<CreateProductCommand, Product>();
 
             // view models
             CreateMap<Product, ProductListView>();
