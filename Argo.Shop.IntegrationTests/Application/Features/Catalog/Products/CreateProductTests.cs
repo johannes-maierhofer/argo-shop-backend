@@ -35,7 +35,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         }
 
         [Fact]
-        public async Task CreateProduct_ShouldReturnInvalid_WithProductNameAlreadyExists()
+        public async Task CreateProduct_ShouldReturnInvalid_WhenProductNameAlreadyExists()
         {
             Testing.RunAsAdministrator();
 
