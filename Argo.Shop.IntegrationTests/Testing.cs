@@ -89,7 +89,7 @@ namespace Argo.Shop.IntegrationTests
         
         public static async Task SeedSampleData()
         {
-            await DataSeeder.SeedSampleData(_scopeFactory);
+            await DbContextSeed.SeedSampleData(_scopeFactory);
         }
     }
 }

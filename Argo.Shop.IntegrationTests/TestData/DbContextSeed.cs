@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Argo.Shop.IntegrationTests.TestData
 {
-    public static class DataSeeder
+    public static class DbContextSeed
     {
         public static async Task SeedSampleData(IServiceScopeFactory scopeFactory)
         {
