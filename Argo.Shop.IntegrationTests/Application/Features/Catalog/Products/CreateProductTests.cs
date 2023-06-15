@@ -11,7 +11,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         }
 
         [Fact]
-        public async Task Create_ValidCommand_Ok()
+        public async Task CreateProduct_ShouldReturnOk_WhenCommandIsValid()
         {
             Testing.RunAsAdministrator();
             var result = await Testing.SendAsync(new CreateProductCommand
@@ -25,7 +25,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         }
 
         [Fact]
-        public async Task Create_RequiredValuesAreEmpty_Invalid()
+        public async Task CreateProduct_ShouldReturnInvalid_WhenRequiredValuesAreEmpty()
         {
             Testing.RunAsAdministrator();
             var result = await Testing.SendAsync(new CreateProductCommand());
@@ -35,7 +35,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         }
 
         [Fact]
-        public async Task Create_WithExistingProductName_Invalid()
+        public async Task CreateProduct_ShouldReturnInvalid_WithProductNameAlreadyExists()
         {
             Testing.RunAsAdministrator();
 

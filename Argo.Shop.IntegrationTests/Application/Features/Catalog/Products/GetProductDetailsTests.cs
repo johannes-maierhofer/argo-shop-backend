@@ -11,7 +11,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         }
 
         [Fact]
-        public async Task GetDetails_KnownId_Ok()
+        public async Task GetProductDetails_ShouldReturnData_ForKnownId()
         {
             const int productId = 1;
             var result = await Testing.SendAsync(new GetProductDetailsQuery
@@ -24,7 +24,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         }
 
         [Fact]
-        public async Task GetDetails_NonExistingId_NotFound()
+        public async Task GetProductDetails_ShouldReturnNotFound_ForNonExistingId()
         {
             const int nonExistingProductId = -1;
             var result = await Testing.SendAsync(new GetProductDetailsQuery
