@@ -1,20 +1,23 @@
 ﻿using Argo.Shop.Application.Common.Models;
 using Argo.Shop.Application.Features.Catalog.Products.Commands.CreateProduct;
+using Argo.Shop.IntegrationTests.Testing;
+using Argo.Shop.IntegrationTests.Testing.Data;
 using Xunit.Abstractions;
 
 namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
 {
     public class CreateProductTests : CommandTestBase
     {
-        public CreateProductTests(ITestOutputHelper output) : base(output)
+        public CreateProductTests(ApplicationFixture fixture, ITestOutputHelper output) 
+            : base(fixture, output)
         {
         }
 
         [Fact]
         public async Task CreateProduct_ShouldReturnOk_WhenCommandIsValid()
         {
-            Testing.RunAsAdministrator();
-            var result = await Testing.SendAsync(new CreateProductCommand
+            using var scope = CreateScope(UserData.AdminUserId);
+            var result = await scope.SendAsync(new CreateProductCommand
             {
                 Name = "New shoes - " + Guid.NewGuid(),
                 Category = "Shoes"
@@ -27,8 +30,8 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         [Fact]
         public async Task CreateProduct_ShouldReturnInvalid_WhenRequiredValuesAreEmpty()
         {
-            Testing.RunAsAdministrator();
-            var result = await Testing.SendAsync(new CreateProductCommand());
+            using var scope = CreateScope(UserData.AdminUserId);
+            var result = await scope.SendAsync(new CreateProductCommand());
 
             Assert.Equal(ResultStatus.Invalid, result.Status);
             Assert.NotEmpty(result.Messages);
@@ -37,9 +40,9 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         [Fact]
         public async Task CreateProduct_ShouldReturnInvalid_WhenProductNameAlreadyExists()
         {
-            Testing.RunAsAdministrator();
+            using var scope = CreateScope(UserData.AdminUserId);
 
-            var result = await Testing.SendAsync(new CreateProductCommand
+            var result = await scope.SendAsync(new CreateProductCommand
             {
                 Name = "Black Five-Panel Cap with White Logo", // product with this name already exists
                 Category = "Caps"

@@ -1,4 +1,4 @@
-﻿namespace Argo.Shop.IntegrationTests.TestData
+﻿namespace Argo.Shop.IntegrationTests.Testing.Data
 {
     public class UserData
     {

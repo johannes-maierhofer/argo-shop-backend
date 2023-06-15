@@ -2,7 +2,7 @@
 
 // from on https://stackoverflow.com/questions/40896047/how-to-turn-on-identity-insert-in-net-core/65732831#65732831
 
-namespace Argo.Shop.IntegrationTests.TestHelpers
+namespace Argo.Shop.IntegrationTests.Testing.Data
 {
     public static class DbContextExtensions
     {

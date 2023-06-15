@@ -1,11 +1,10 @@
 ﻿using Argo.Shop.Domain.Catalog.Products;
 using Argo.Shop.Infrastructure.Identity;
 using Argo.Shop.Infrastructure.Persistence;
-using Argo.Shop.IntegrationTests.TestHelpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Argo.Shop.IntegrationTests.TestData
+namespace Argo.Shop.IntegrationTests.Testing.Data
 {
     public static class DbContextSeed
     {
@@ -201,7 +200,7 @@ namespace Argo.Shop.IntegrationTests.TestData
             await roleManager.CreateAsync(new IdentityRole("Administrator"));
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            
+
             var user = new ApplicationUser
             {
                 Id = UserData.AdminUserId,

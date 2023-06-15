@@ -138,3 +138,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+// Make the Program class public using a partial class declaration (integration tests)
+// ReSharper disable once ClassNeverInstantiated.Global
+public partial class Program { }
