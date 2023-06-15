@@ -10,6 +10,7 @@ namespace Argo.Shop.IntegrationTests
         protected IntegrationTestBase(ITestOutputHelper output)
         {
             Output = output;
+            Testing.CurrentUserId = null;
         }
     }
 

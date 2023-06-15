@@ -13,6 +13,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         [Fact]
         public async Task Create_ValidCommand_Ok()
         {
+            Testing.RunAsAdministrator();
             var result = await Testing.SendAsync(new CreateProductCommand
             {
                 Name = "New shoes - " + Guid.NewGuid(),
@@ -26,6 +27,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         [Fact]
         public async Task Create_RequiredValuesAreEmpty_Invalid()
         {
+            Testing.RunAsAdministrator();
             var result = await Testing.SendAsync(new CreateProductCommand());
 
             Assert.Equal(ResultStatus.Invalid, result.Status);
@@ -35,6 +37,8 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         [Fact]
         public async Task Create_WithExistingProductName_Invalid()
         {
+            Testing.RunAsAdministrator();
+
             var result = await Testing.SendAsync(new CreateProductCommand
             {
                 Name = "Black Five-Panel Cap with White Logo", // product with this name already exists
