@@ -3,11 +3,11 @@
 namespace Argo.Shop.IntegrationTests
 {
     [Collection("Application")]
-    public abstract class IntegrationTestBase
+    public abstract class TestBase
     {
         protected ITestOutputHelper Output { get; }
 
-        protected IntegrationTestBase(ITestOutputHelper output)
+        protected TestBase(ITestOutputHelper output)
         {
             Output = output;
             Testing.CurrentUserId = null;
@@ -15,17 +15,17 @@ namespace Argo.Shop.IntegrationTests
     }
 
     // data are reseeded once for all tests in the test class
-    public abstract class QueryIntegrationTestBase : IntegrationTestBase, IClassFixture<ReseedDbFixture>
+    public abstract class QueryTestBase : TestBase, IClassFixture<ReseedDbFixture>
     {
-        protected QueryIntegrationTestBase(ITestOutputHelper output) 
+        protected QueryTestBase(ITestOutputHelper output) 
             : base(output)
         {
         }
     }
 
-    public abstract class CommandIntegrationTestBase : IntegrationTestBase, IAsyncLifetime
+    public abstract class CommandTestBase : TestBase, IAsyncLifetime
     {
-        protected CommandIntegrationTestBase(ITestOutputHelper output)
+        protected CommandTestBase(ITestOutputHelper output)
             : base(output)
         {
         }

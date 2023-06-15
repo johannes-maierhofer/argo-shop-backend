@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 
 namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
 {
-    public class CreateProductTests : CommandIntegrationTestBase
+    public class CreateProductTests : CommandTestBase
     {
         public CreateProductTests(ITestOutputHelper output) : base(output)
         {
