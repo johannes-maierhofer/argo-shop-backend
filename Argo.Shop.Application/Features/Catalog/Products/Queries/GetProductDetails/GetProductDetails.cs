@@ -26,13 +26,13 @@ namespace Argo.Shop.Application.Features.Catalog.Products.Queries.GetProductDeta
         public async Task<Result<ProductDetailsDto>> Handle(GetProductDetailsQuery query,
             CancellationToken cancellationToken)
         {
-            var view = await _dbContext.Catalog.Products
+            var dto = await _dbContext.Catalog.Products
                 .ProjectTo<ProductDetailsDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(p => p.Id == query.Id, cancellationToken: cancellationToken);
 
-            return view == null
+            return dto == null
                 ? Result.NotFound<ProductDetailsDto>()
-                : Result.Ok(view);
+                : Result.Ok(dto);
         }
     }
 }
