@@ -16,6 +16,7 @@ namespace Argo.Shop.Application.Features.Catalog.Products.Mappings
             // view models
             CreateMap<Product, ProductListDto>();
             CreateMap<Product, ProductDetailsDto>();
+            CreateMap<ProductImage, ProductDetailsDto.ProductImageListDto>();
         }
     }
 }
