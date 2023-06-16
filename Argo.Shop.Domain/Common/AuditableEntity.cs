@@ -1,11 +1,11 @@
 ﻿namespace Argo.Shop.Domain.Common
 {
-    public class AuditableEntity<T> : Entity<T>
+    public abstract class AuditableEntity<T> : Entity<T>, IAuditable
         where T : struct
     {
-        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset Created { get; set; }
         public string CreatedBy { get; set; } = string.Empty;
-        public DateTimeOffset LastModifiedAt { get; set; }
+        public DateTimeOffset LastModified { get; set; }
         public string LastModifiedBy { get; set; } = string.Empty;
     }
 }

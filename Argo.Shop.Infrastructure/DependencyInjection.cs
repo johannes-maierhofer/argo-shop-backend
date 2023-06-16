@@ -19,7 +19,7 @@ namespace Argo.Shop.Infrastructure
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            // services.AddScoped<AuditableEntitiesInterceptor>();
+            services.AddScoped<AuditableEntitySaveChangesInterceptor>();
             services.AddSingleton<DomainEventDispatchingInterceptor>();
 
             services.AddDbContext<AppDbContext>((serviceProvider, options) =>
@@ -29,7 +29,7 @@ namespace Argo.Shop.Infrastructure
                         b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
 
                     // add interceptors
-                    // options.AddInterceptors(serviceProvider.GetRequiredService<AuditableEntitiesInterceptor>());
+                    options.AddInterceptors(serviceProvider.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
                     options.AddInterceptors(serviceProvider.GetRequiredService<DomainEventDispatchingInterceptor>());
                 }
             );
@@ -44,7 +44,6 @@ namespace Argo.Shop.Infrastructure
                 .AddEntityFrameworkStores<AppDbContext>();
 
             services.AddTransient<IIdentityService, IdentityService>();
-
 
             // TODO: add specific policies
             //services.AddAuthorization(options =>
