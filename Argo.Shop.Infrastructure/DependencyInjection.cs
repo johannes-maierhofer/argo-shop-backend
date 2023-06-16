@@ -51,7 +51,7 @@ namespace Argo.Shop.Infrastructure
             //    options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
 
             services.AddSingleton<IDomainEventPublisher, DomainEventPublisher>();
-            // services.AddTransient<IDateTimeService, DateTimeService>();
+            services.AddTransient<IDateTimeService, DateTimeService>();
 
             //services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
 
