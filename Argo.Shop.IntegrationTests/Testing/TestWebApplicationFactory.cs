@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Argo.Shop.IntegrationTests.Testing.Services;
+using Divergic.Logging.Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace Argo.Shop.IntegrationTests.Testing
 {
@@ -32,13 +34,13 @@ namespace Argo.Shop.IntegrationTests.Testing
                 //services.Decorate<IDomainEventPublisher, TestScopeDomainEventPublisherDecorator>();
 
                 // add logging
-                //services.AddSingleton<ILoggerFactory, TestScopeLoggerFactory>();
-                //services.Add(ServiceDescriptor.Singleton(typeof(ILogger<>), typeof(Logger<>)));
-                //services.AddSingleton(new LoggingConfig // config for Divergic.Logging.Xunit
-                //{
-                //    IgnoreTestBoundaryException = true,
-                //    LogLevel = LogLevel.Information // you can change that to Debug if needed
-                //});
+                services.AddSingleton<ILoggerFactory, TestScopeLoggerFactory>();
+                services.Add(ServiceDescriptor.Singleton(typeof(ILogger<>), typeof(Logger<>)));
+                services.AddSingleton(new LoggingConfig // config for Divergic.Logging.Xunit
+                {
+                    IgnoreTestBoundaryException = true,
+                    LogLevel = LogLevel.Information // you can change that to Debug if needed
+                });
             });
 
             builder.UseEnvironment("Test");
