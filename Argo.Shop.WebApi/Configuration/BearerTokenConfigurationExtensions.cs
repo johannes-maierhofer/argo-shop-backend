@@ -12,7 +12,7 @@ namespace Argo.Shop.WebApi.Configuration
         {
             var jwtSection = configuration.GetSection("JwtBearerToken");
             services.Configure<JwtBearerTokenSettings>(jwtSection);
-            var jwtBearerTokenSettings = jwtSection.Get<JwtBearerTokenSettings>();
+            var jwtBearerTokenSettings = jwtSection.Get<JwtBearerTokenSettings>() ?? new JwtBearerTokenSettings();
             var key = Encoding.ASCII.GetBytes(jwtBearerTokenSettings.SecretKey);
 
             services.AddAuthentication(options =>
