@@ -5,6 +5,7 @@ using Argo.Shop.Application.Common.Persistence;
 using Argo.Shop.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Argo.Shop.Domain.Catalog.Products;
+using Argo.Shop.Infrastructure.Persistence.Conventions;
 
 namespace Argo.Shop.Infrastructure.Persistence
 {
@@ -37,6 +38,13 @@ namespace Argo.Shop.Infrastructure.Persistence
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             base.OnModelCreating(builder);
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Conventions.Add(_ => new MaxStringLength256Convention());
+
+            base.ConfigureConventions(configurationBuilder);
         }
     }
 

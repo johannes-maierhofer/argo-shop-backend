@@ -2,7 +2,7 @@
 
 namespace Argo.Shop.Domain.Catalog.Products
 {
-    public class Product : Entity<int>
+    public class Product : AuditableEntity<int>
     {
         public string Name { get; set; } = string.Empty;
         public decimal Price { get; set; }
