@@ -1,7 +1,6 @@
 ﻿using Argo.Shop.Application.Common.Models;
 using Argo.Shop.Application.Features.Catalog.Products.Commands.CreateProduct;
 using Argo.Shop.IntegrationTests.Testing;
-using Argo.Shop.IntegrationTests.Testing.Data;
 using Xunit.Abstractions;
 
 namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
@@ -16,7 +15,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         [Fact]
         public async Task CreateProduct_ShouldReturnOk_WhenCommandIsValid()
         {
-            using var scope = CreateScope(UserData.AdminUserId);
+            using var scope = CreateScopeForAdminUser();
             var result = await scope.SendAsync(new CreateProductCommand
             {
                 Name = "New shoes - " + Guid.NewGuid(),
@@ -28,9 +27,22 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         }
 
         [Fact]
+        public async Task CreateProduct_ShouldReturnUnauthorized_WhenCurrentUserIsNotAdministrator()
+        {
+            using var scope = CreateScopeForDefaultUser();
+            var result = await scope.SendAsync(new CreateProductCommand
+            {
+                Name = "New shoes - " + Guid.NewGuid(),
+                Category = "Shoes"
+            });
+
+            Assert.Equal(ResultStatus.Unauthorized, result.Status);
+        }
+
+        [Fact]
         public async Task CreateProduct_ShouldReturnInvalid_WhenRequiredValuesAreEmpty()
         {
-            using var scope = CreateScope(UserData.AdminUserId);
+            using var scope = CreateScopeForAdminUser();
             var result = await scope.SendAsync(new CreateProductCommand());
 
             Assert.Equal(ResultStatus.Invalid, result.Status);
@@ -40,7 +52,7 @@ namespace Argo.Shop.IntegrationTests.Application.Features.Catalog.Products
         [Fact]
         public async Task CreateProduct_ShouldReturnInvalid_WhenProductNameAlreadyExists()
         {
-            using var scope = CreateScope(UserData.AdminUserId);
+            using var scope = CreateScopeForAdminUser();
 
             var result = await scope.SendAsync(new CreateProductCommand
             {
