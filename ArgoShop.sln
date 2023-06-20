@@ -17,7 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DDAD11DA-AE6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{482CD3E1-CDC2-4DDC-AD9F-974A278847E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Argo.Shop.UnitTests", "Argo.Shop.UnitTests\Argo.Shop.UnitTests.csproj", "{36F10DDB-FCE1-4C4F-8174-830E75378DDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Argo.Shop.UnitTests", "Argo.Shop.UnitTests\Argo.Shop.UnitTests.csproj", "{36F10DDB-FCE1-4C4F-8174-830E75378DDF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{848C92BC-21A9-4C5A-8245-F7A958E6264E}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
